@@ -3,7 +3,6 @@ package gov.iti.jets.api.rest.resources;
 import gov.iti.jets.dto.FilmDto;
 import gov.iti.jets.dto.FilmFormDto;
 import gov.iti.jets.service.FilmService;
-import gov.iti.jets.views.NicerButSlowerFilmList;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 

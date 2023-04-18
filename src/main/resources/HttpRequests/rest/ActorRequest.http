@@ -1,0 +1,35 @@
+POST http://localhost:8070/apis/rest/actors HTTP/1.1
+Content-Type: application/json
+
+{"firstName": "Mustafa","lastName": "Shaban"}
+
+###
+
+POST http://localhost:8070/apis/rest/actors HTTP/1.1
+Content-Type: application/xml
+
+<actor>
+    <firstName>Ahmed</firstName>
+    <lastName>El-Saqq</lastName>
+</actor>
+
+
+###
+
+PUT http://localhost:8070/apis/rest/actors/210 HTTP/1.1
+Content-Type: application/json
+
+{"firstName": "Mustafa","lastName": "Shabaan"}
+
+###
+GET http://localhost:8070/apis/rest/actors HTTP/1.1
+
+###
+
+http://localhost:8070/apis/rest/actors/1 HTTP/1.1
+
+###
+
+http://localhost:8070/apis/rest/actors/search?ActorName=Ahmed HTTP/1.1
+
+

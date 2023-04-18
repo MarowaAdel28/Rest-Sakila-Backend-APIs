@@ -1,0 +1,49 @@
+POST http://localhost:8070/apis/rest/stores
+Content-Type: application/json
+
+{
+  "address": "Oracle",
+  "district": "cairo",
+  "city": "3",
+  "country": "101",
+  "postalCode": "12345",
+  "phone": "01112345678",
+  "storeManager": "6"
+}
+
+###
+
+PUT http://localhost:8070/apis/rest/stores/6
+Content-Type: application/json
+
+{
+  "address": "Oracle",
+  "district": "cairo",
+  "city": "3",
+  "country": "101",
+  "postalCode": "12345",
+  "phone": "01112345678",
+  "storeManager": "6"
+}
+
+
+###
+GET http://localhost:8070/apis/rest/stores HTTP/1.1
+
+###
+
+GET http://localhost:8070/apis/rest/stores/1 HTTP/1.1
+
+###
+GET http://localhost:8070/apis/rest/stores/1/customers HTTP/1.1
+
+###
+GET http://localhost:8070/apis/rest/stores/1/staffs HTTP/1.1
+
+###
+GET http://localhost:8070/apis/rest/stores/1/inventries HTTP/1.1
+
+###
+GET http://localhost:8070/apis/rest/stores/1/films HTTP/1.1
+
+

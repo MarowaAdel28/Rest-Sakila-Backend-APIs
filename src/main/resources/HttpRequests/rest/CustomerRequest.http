@@ -1,0 +1,67 @@
+POST http://localhost:8070/apis/rest/customers
+Content-Type: application/json
+
+{ "firstName": "rola",
+  "lastName": "mohamed",
+  "email": "rola@gmail.com",
+  "active": true,
+  "address": "cairo",
+  "district": "cairo",
+  "city": "3",
+  "country": "101",
+  "postalCode": "12345",
+  "phone": "01112345678",
+  "store": "4"
+}
+
+###
+
+PUT http://localhost:8070/apis/rest/customers/609
+Content-Type: application/json
+
+{ "firstName": "Rola",
+  "lastName": "Mohamed",
+  "email": "rola@gmail.com",
+  "active": true,
+  "address": "cairo",
+  "district": "cairo",
+  "city": "3",
+  "country": "101",
+  "postalCode": "12345",
+  "phone": "01112345678",
+  "store": "4"
+}
+
+###
+GET http://localhost:8070/apis/rest/customers HTTP/1.1
+
+###
+
+GET http://localhost:8070/apis/rest/customers/1 HTTP/1.1
+
+###
+
+GET http://localhost:8070/apis/rest/customers/filter?isActive=true HTTP/1.1
+
+###
+
+GET http://localhost:8070/apis/rest/customers/filter?isActive=false HTTP/1.1
+
+###
+
+GET http://localhost:8070/apis/rest/customers/1/payment HTTP/1.1
+
+###
+
+GET http://localhost:8070/apis/rest/customers/1/rental HTTP/1.1
+
+###
+
+GET http://localhost:8070/apis/rest/customers/search?name=maha HTTP/1.1
+
+###
+
+
+
+###
+#PUT

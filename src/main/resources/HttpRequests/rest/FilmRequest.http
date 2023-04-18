@@ -1,0 +1,30 @@
+POST http://localhost:8070/apis/rest/films
+Content-Type: application/json
+
+{
+  "title": "ZORRO ARK S5",
+  "description": "A Intrepid Panorama of a Mad Scientist And a Boy who must Redeem a Boy in A Monastery",
+  "releaseYear": "2010",
+  "rentalDuration": "1",
+  "rentalRate": "6.1",
+  "length": "50",
+  "replacementCost": "20.01",
+  "rating": "PG",
+  "specialFeatures": "Trailers,Commentaries,Behind the Scenes",
+  "language": "3",
+  "category": "2",
+  "actor": "2",
+  "store": "2"
+}
+
+
+###
+GET http://localhost:8070/apis/rest/films HTTP/1.1
+
+###
+
+GET http://localhost:8070/apis/rest/films/1 HTTP/1.1
+
+###
+
+

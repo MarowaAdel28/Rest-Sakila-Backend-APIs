@@ -1,0 +1,34 @@
+POST http://localhost:8070/apis/rest/rentals
+Content-Type: application/json
+
+{
+  "customer": "609",
+  "inventory": "2",
+  "staff": "2",
+  "amount": "610",
+  "returnDt": "4"
+}
+
+###
+
+PUT http://localhost:8070/apis/rest/rentals/16058
+Content-Type: application/json
+
+{
+  "customer": "609",
+  "inventory": "2",
+  "staff": "2",
+  "amount": "610",
+  "returnDt": "6"
+}
+
+###
+GET http://localhost:8070/apis/rest/rentals HTTP/1.1
+
+###
+
+GET http://localhost:8070/apis/rest/rentals/1 HTTP/1.1
+
+###
+
+GET http://localhost:8070/apis/rest/rentals/1/payment HTTP/1.1

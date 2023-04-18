@@ -1,0 +1,13 @@
+GET http://localhost:8070/apis/rest/inventories HTTP/1.1
+
+###
+
+GET http://localhost:8070/apis/rest/inventories/1 HTTP/1.1
+
+###
+
+GET http://localhost:8070/apis/rest/inventories/filter?filmId=1 HTTP/1.1
+
+###
+
+GET http://localhost:8070/apis/rest/inventories/filter?storeId=1 HTTP/1.1

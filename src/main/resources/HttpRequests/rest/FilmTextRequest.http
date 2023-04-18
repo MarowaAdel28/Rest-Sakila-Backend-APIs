@@ -1,0 +1,10 @@
+
+GET http://localhost:8070/apis/rest/films_text HTTP/1.1
+
+###
+
+GET http://localhost:8070/apis/rest/films_text/1 HTTP/1.1
+
+###
+
+

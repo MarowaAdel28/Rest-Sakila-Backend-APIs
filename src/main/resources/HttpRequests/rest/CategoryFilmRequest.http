@@ -1,0 +1,4 @@
+GET http://localhost:8070/apis/rest/category_films/1 HTTP/1.1
+
+###
+

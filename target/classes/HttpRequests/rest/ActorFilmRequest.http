@@ -1,0 +1,9 @@
+GET http://localhost:8070/apis/rest/actor_films/99 HTTP/1.1
+
+###
+
+GET http://localhost:8070/apis/rest/actor_films/filter?actorId=1&rating=PG HTTP/1.1
+
+###
+
+GET http://localhost:8070/apis/rest/actor_films/filter?actorId=1&language=English HTTP/1.1

@@ -5,10 +5,7 @@ import gov.iti.jets.dao.*;
 import gov.iti.jets.dto.StaffDto;
 import gov.iti.jets.dto.StaffFormDto;
 import gov.iti.jets.dto.StoreFormDto;
-import gov.iti.jets.entity.Address;
-import gov.iti.jets.entity.City;
-import gov.iti.jets.entity.Staff;
-import gov.iti.jets.entity.Store;
+import gov.iti.jets.entity.*;
 import gov.iti.jets.mapper.AddressMapper;
 import gov.iti.jets.mapper.StaffMapper;
 import gov.iti.jets.util.Utility;
@@ -72,6 +69,64 @@ public class StaffService {
         dbFactory.closeEntityManager(entityManager);
 
         return staffDtoList;
+    }
+
+    public boolean deleteStaff(Short id) {
+        DBFactory dbFactory = DBFactory.getDbFactoryInstance();
+        EntityManager entityManager = dbFactory.createEntityManager();
+
+        StaffDAO staffDAO = new StaffDAO(entityManager);
+
+        entityManager.getTransaction().begin();
+
+        boolean result = true,paymentResult,rentalResult;
+
+        Staff staff = staffDAO.get(id);
+
+
+        List<Payment> paymentList = staff.getPaymentList();
+        List<Rental> rentalList = staff.getRentalList();
+
+        paymentResult = deleteStaffPaymentList(entityManager,paymentList);
+        rentalResult = deleteStaffRentalList(entityManager,rentalList);
+
+        if(!paymentResult || !rentalResult) {
+            result = false;
+        }
+        if(staff.getStaffId()!=null) {
+            result = false;
+        }
+        if(result) {
+            result = staffDAO.delete(staff);
+        }
+        dbFactory.commitTransaction(entityManager,result);
+        dbFactory.closeEntityManager(entityManager);
+        return result;
+    }
+
+    private boolean deleteStaffPaymentList(EntityManager entityManager, List<Payment> paymentList) {
+
+        PaymentDAO paymentDAO = new PaymentDAO(entityManager);
+
+        for (Payment payment : paymentList) {
+            if(!paymentDAO.delete(payment))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean deleteStaffRentalList(EntityManager entityManager, List<Rental> rentalList) {
+
+        RentalDAO rentalDAO = new RentalDAO(entityManager);
+
+        for (Rental rental : rentalList) {
+            if(!rentalDAO.delete(rental)){
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean addStaff(StaffFormDto staffFormDto) {

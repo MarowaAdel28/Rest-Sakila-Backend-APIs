@@ -100,4 +100,9 @@ public class CategoryResource {
         return categoryService.editCategory(categoryId,categoryDto.getCategoryName());
     }
 
+    @DELETE
+    @Path("{id:[0-9]+}")
+    public boolean deleteCategory(@PathParam("id") Short id) {
+        return categoryService.deleteCategory(id);
+    }
 }

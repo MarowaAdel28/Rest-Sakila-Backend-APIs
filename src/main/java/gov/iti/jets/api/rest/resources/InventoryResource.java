@@ -99,4 +99,10 @@ public class InventoryResource {
 
         return Response.ok(inventoryDtoList).links(links.toArray(new Link[0])).build();
     }
+
+    @DELETE
+    @Path("{id:[0-9]+}")
+    public boolean deleteInventory(@PathParam("id") Short id) {
+        return inventoryService.deleteInventory(id);
+    }
 }

@@ -63,4 +63,14 @@ public class StaffResource {
     public boolean editStaff(@PathParam("id") Short id, StaffFormDto staffFormDto) {
         return staffService.editStaff(id,staffFormDto);
     }
+
+    @DELETE
+    @Path("{id:[0-9]+}")
+    public Response deleteStaff(@PathParam("id") Short id) {
+        boolean result = staffService.deleteStaff(id);
+        if(result) {
+            return Response.ok("deleted successfully").build();
+        }
+        return Response.ok("failed to delete it").build();
+    }
 }

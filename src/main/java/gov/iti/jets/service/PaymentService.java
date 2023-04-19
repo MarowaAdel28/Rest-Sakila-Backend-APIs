@@ -67,9 +67,9 @@ public class PaymentService {
         EntityManager entityManager = dbFactory.createEntityManager();
 
         PaymentDAO paymentDAO = new PaymentDAO(entityManager);
-        Payment payment = paymentDAO.get(paymentId);
 
         entityManager.getTransaction().begin();
+        Payment payment = paymentDAO.get(paymentId);
 
         boolean result = paymentDAO.delete(payment);
 

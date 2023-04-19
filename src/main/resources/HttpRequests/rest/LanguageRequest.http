@@ -2,17 +2,8 @@ POST http://localhost:8070/apis/rest/languages
 Content-Type: application/json
 
 {
-  "name": "LALALAL"
+  "name": "Italian1"
 }
-
-###
-
-POST http://localhost:8070/apis/rest/languages
-Content-Type: application/xml
-
-<LanguageFormDto>
-    <name>Italian1</name>
-</LanguageFormDto>
 
 ###
 
@@ -29,3 +20,7 @@ GET http://localhost:8070/apis/rest/languages HTTP/1.1
 ###
 
 GET http://localhost:8070/apis/rest/languages/1 HTTP/1.1
+
+###
+
+DELETE http://localhost:8070/apis/rest/languages/1 HTTP/1.1

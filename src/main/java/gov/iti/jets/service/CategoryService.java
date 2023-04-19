@@ -146,4 +146,20 @@ public class CategoryService {
         if(optionalCategory.isPresent()) return optionalCategory.get();
         return null;
     }
+
+    public boolean deleteCategory(Short id) {
+        DBFactory dbFactory = DBFactory.getDbFactoryInstance();
+        EntityManager entityManager = dbFactory.createEntityManager();
+        CategoryDAO categoryDAO = new CategoryDAO(entityManager);
+
+        entityManager.getTransaction().begin();
+
+        Category category = categoryDAO.get(id);
+
+        boolean result = categoryDAO.delete(category);
+
+        dbFactory.commitTransaction(entityManager,result);
+        dbFactory.closeEntityManager(entityManager);
+        return result;
+    }
 }

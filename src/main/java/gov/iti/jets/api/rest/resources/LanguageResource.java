@@ -65,4 +65,14 @@ public class LanguageResource {
     public boolean editLanguage(@PathParam("id") Short id, LanguageFormDto languageFormDto) {
         return languageService.editLanguage(id,languageFormDto.getName());
     }
+
+    @DELETE
+    @Path("{id:[0-9]+}")
+    public Response delete(@PathParam("id") Short id) {
+        boolean result =  languageService.deleteLanguage(id);
+        if(result) {
+            return Response.ok("deleted successfully").build();
+        }
+        return Response.ok("failed to delete it").build();
+    }
 }

@@ -75,6 +75,80 @@ public class FilmService {
         dbFactory.closeEntityManager(entityManager);
         return filmDtoList;
     }
+
+    public boolean deleteFilm(Short id) {
+        DBFactory dbFactory = DBFactory.getDbFactoryInstance();
+        EntityManager entityManager = dbFactory.createEntityManager();
+
+        FilmDAO filmDAO = new FilmDAO(entityManager);
+
+        entityManager.getTransaction().begin();
+
+        Film film = filmDAO.get(id);
+        List<FilmActor> filmActorList = film.getFilmActorList();
+        List<FilmCategory> filmCategoryList = film.getFilmCategoryList();
+        List<Inventory> inventoryList = film.getInventoryList();
+
+        boolean result = true, filmActorResult, filmCategoryResult, inventoryResult;
+
+        filmActorResult = deleteFilmActor(entityManager,filmActorList);
+        filmCategoryResult = deleteFilmCategory(entityManager,filmCategoryList);
+        inventoryResult = deleteInventory(entityManager,inventoryList);
+
+        if(!filmActorResult || !filmCategoryResult || !inventoryResult) {
+            result = false;
+        }
+        if(result) {
+            result = filmDAO.delete(film);
+        }
+        dbFactory.commitTransaction(entityManager,result);
+        dbFactory.closeEntityManager(entityManager);
+        return result;
+    }
+
+    private boolean deleteInventory(EntityManager entityManager, List<Inventory> inventoryList) {
+        InventoryDAO inventoryDAO = new InventoryDAO(entityManager);
+
+        for (Inventory inventory : inventoryList) {
+            List<Rental> rentalList = inventory.getRentalList();
+            if(!deleteRental(entityManager,rentalList)){
+                return false;
+            }
+            if(!inventoryDAO.delete(inventory)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean deleteRental(EntityManager entityManager, List<Rental> rentalList) {
+        RentalDAO rentalDAO = new RentalDAO(entityManager);
+        for (Rental rental : rentalList) {
+            if(!rentalDAO.delete(rental)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    private boolean deleteFilmActor(EntityManager entityManager,List<FilmActor> filmActorList) {
+        FilmActorDAO filmActorDAO = new FilmActorDAO(entityManager);
+        for (FilmActor filmActor : filmActorList) {
+            if(!filmActorDAO.delete(filmActor)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean deleteFilmCategory(EntityManager entityManager,List<FilmCategory> filmCategoryList) {
+        FilmCategoryDAO filmCategoryDAO = new FilmCategoryDAO(entityManager);
+        for (FilmCategory filmCategory : filmCategoryList) {
+            if(!filmCategoryDAO.delete(filmCategory)) {
+                return false;
+            }
+        }
+        return true;
+    }
     public boolean addFilm(FilmFormDto filmDto) {
 
         DBFactory dbFactory = DBFactory.getDbFactoryInstance();

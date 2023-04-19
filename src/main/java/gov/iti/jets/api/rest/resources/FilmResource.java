@@ -59,4 +59,10 @@ public class FilmResource {
     public boolean addFilm(FilmFormDto filmFormDto) {
         return filmService.addFilm(filmFormDto);
    }
+
+   @DELETE
+    @Path("{id:[0-9]+}")
+    public boolean deleteFilm(@PathParam("id") Short id) {
+        return filmService.deleteFilm(id);
+   }
 }

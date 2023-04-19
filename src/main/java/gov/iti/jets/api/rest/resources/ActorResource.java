@@ -106,6 +106,11 @@ public class ActorResource {
         return actorService.editActor(id,actorDto);
     }
 
+    @DELETE
+    @Path("{id:[0-9]+}")
+    public boolean delete(@PathParam("id") Short id) {
+        return actorService.deleteActor(id);
+    }
 }
 
 // /actors

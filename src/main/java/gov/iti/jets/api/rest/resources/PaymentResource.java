@@ -2,10 +2,7 @@ package gov.iti.jets.api.rest.resources;
 
 import gov.iti.jets.dto.PaymentDto;
 import gov.iti.jets.service.PaymentService;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 
 import java.util.ArrayList;
@@ -52,5 +49,11 @@ public class PaymentResource {
         links.add(link);
 
         return Response.ok(paymentDto).links(links.toArray(new Link[0])).build();
+    }
+
+    @DELETE
+    @Path("{id:[0-9]+}")
+    public boolean deletePayment(@PathParam("id") Short id) {
+        return paymentService.deletePayment(id);
     }
 }

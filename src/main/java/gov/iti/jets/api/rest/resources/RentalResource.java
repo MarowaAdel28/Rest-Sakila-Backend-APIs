@@ -96,4 +96,10 @@ public class RentalResource {
     public boolean editRental(@PathParam("id") Integer id, RentalFormDto rentalFormDto) {
         return rentalService.editRental(id,rentalFormDto);
     }
+
+    @DELETE
+    @Path("{id:[0-9]+}")
+    public boolean deleteRental(@PathParam("id") Integer id) {
+        return rentalService.deleteRental(id);
+    }
 }

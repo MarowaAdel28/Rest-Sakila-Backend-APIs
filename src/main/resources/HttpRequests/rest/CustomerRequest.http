@@ -61,7 +61,6 @@ GET http://localhost:8070/apis/rest/customers/search?name=maha HTTP/1.1
 
 ###
 
-
+DELETE http://localhost:8070/apis/rest/customers/609
 
 ###
-#PUT

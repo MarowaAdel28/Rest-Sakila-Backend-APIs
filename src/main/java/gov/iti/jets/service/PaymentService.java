@@ -1,6 +1,7 @@
 package gov.iti.jets.service;
 
 import gov.iti.jets.custommapper.CustomPaymentMapper;
+import gov.iti.jets.dao.CustomerDAO;
 import gov.iti.jets.dao.DBFactory;
 import gov.iti.jets.dao.PaymentDAO;
 import gov.iti.jets.dto.PaymentDto;
@@ -59,5 +60,21 @@ public class PaymentService {
 
         dbFactory.closeEntityManager(entityManager);
         return paymentDtoList;
+    }
+
+    public boolean deletePayment(Short paymentId) {
+        DBFactory dbFactory = DBFactory.getDbFactoryInstance();
+        EntityManager entityManager = dbFactory.createEntityManager();
+
+        PaymentDAO paymentDAO = new PaymentDAO(entityManager);
+        Payment payment = paymentDAO.get(paymentId);
+
+        entityManager.getTransaction().begin();
+
+        boolean result = paymentDAO.delete(payment);
+
+        dbFactory.commitTransaction(entityManager,result);
+        dbFactory.closeEntityManager(entityManager);
+        return result;
     }
 }

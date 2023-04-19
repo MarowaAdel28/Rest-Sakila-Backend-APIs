@@ -194,6 +194,62 @@ public class CustomerService {
         return customerInfoDtoList;
     }
 
+    public boolean deleteCustomer(Short customerId) {
+        DBFactory dbFactory = DBFactory.getDbFactoryInstance();
+        EntityManager entityManager = dbFactory.createEntityManager();
+
+        CustomerDAO customerDAO = new CustomerDAO(entityManager);
+
+        entityManager.getTransaction().begin();
+
+        Customer customer = customerDAO.get(customerId);
+        List<Payment> paymentList = customer.getPaymentList();
+        List<Rental> rentalList = customer.getRentalList();
+
+        boolean result = true,paymentResult,rentalResult;
+
+        paymentResult = deleteCustomerPaymentList(entityManager,paymentList);
+        rentalResult = deleteCustomerRentalList(entityManager,rentalList);
+
+        if(!paymentResult || !rentalResult ) {
+            result = false;
+        }
+        if(result) {
+            result = customerDAO.delete(customer);
+        }
+
+        dbFactory.commitTransaction(entityManager,result);
+
+        dbFactory.closeEntityManager(entityManager);
+
+        return result;
+    }
+
+    private boolean deleteCustomerPaymentList(EntityManager entityManager, List<Payment> paymentList) {
+
+        PaymentDAO paymentDAO = new PaymentDAO(entityManager);
+
+        for (Payment payment : paymentList) {
+            if(!paymentDAO.delete(payment))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean deleteCustomerRentalList(EntityManager entityManager, List<Rental> rentalList) {
+
+        RentalDAO rentalDAO = new RentalDAO(entityManager);
+
+        for (Rental rental : rentalList) {
+            if(!rentalDAO.delete(rental)){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public boolean addCustomer(CustomerFormDto customerDto) {
         boolean isSaved = false;
         DBFactory dbFactory = DBFactory.getDbFactoryInstance();

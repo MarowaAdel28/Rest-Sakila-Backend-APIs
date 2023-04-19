@@ -185,4 +185,23 @@ public class RentalService {
 
         return  payment;
     }
+
+    public boolean deleteRental(Integer id) {
+        DBFactory dbFactory = DBFactory.getDbFactoryInstance();
+        EntityManager entityManager =dbFactory.createEntityManager();
+
+        RentalDAO rentalDAO = new RentalDAO(entityManager);
+
+        boolean result = false;
+
+        entityManager.getTransaction().begin();
+
+        Rental rental = rentalDAO.get(id);
+
+        result = rentalDAO.delete(rental);
+
+        dbFactory.commitTransaction(entityManager,result);
+        dbFactory.closeEntityManager(entityManager);
+        return result;
+    }
 }

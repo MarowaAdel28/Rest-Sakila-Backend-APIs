@@ -251,4 +251,10 @@ public class CustomerResource {
     public boolean editCustomer(@PathParam("id") short id, CustomerFormDto customerFormDto) {
         return customerService.editCustomer(id,customerFormDto);
     }
+
+    @DELETE
+    @Path("{id:[0-9]+}")
+    public boolean deleteCustomer(@PathParam("id") Short id) {
+        return customerService.deleteCustomer(id);
+    }
 }

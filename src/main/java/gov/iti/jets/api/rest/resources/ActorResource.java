@@ -5,7 +5,10 @@ import gov.iti.jets.dto.ActorFormDto;
 import gov.iti.jets.service.ActorService;
 import jakarta.ws.rs.*;
 
-import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Path("actors")
@@ -18,15 +21,54 @@ public class ActorResource {
     }
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ActorDto> getAllActors() {
-        return actorService.getActorList();
+    public Response getAllActors(@Context UriInfo uriInfo) {
+        List<ActorDto> actorDtoList = actorService.getActorList();
+
+        List<Link> links = new ArrayList<>();
+
+        Link link = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("actors").path("1"))
+                .rel("actor").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("actors").path("search")
+                        .queryParam("name","Ahmed"))
+                .rel("search").build();
+        links.add(link);
+
+        return Response.ok(actorDtoList).links(links.toArray(new Link[0])).build();
     }
+
+//    @GET
+//    @Path("{id: [0-9]+}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public ActorDto getActorById(@PathParam("id") Short id) {
+//        return actorService.getActorById(id);
+//    }
 
     @GET
     @Path("{id: [0-9]+}")
     @Produces(MediaType.APPLICATION_JSON)
-    public ActorDto getActorById(@PathParam("id") Short id) {
-        return actorService.getActorById(id);
+    public Response getActorById(@PathParam("id") Short id, @Context UriInfo uriInfo) {
+        ActorDto actorDto = actorService.getActorById(id);
+
+        List<Link> links = new ArrayList<>();
+
+        Link link = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("actors"))
+                .rel("actors").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("actors").path("search")
+                        .queryParam("name","Ahmed"))
+                .rel("search").build();
+        links.add(link);
+
+        return Response.ok(actorDto).links(links.toArray(new Link[0])).build();
     }
 
     @POST
@@ -38,8 +80,22 @@ public class ActorResource {
     @GET
     @Path("search")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ActorDto> search(@QueryParam("ActorName") String name) {
-        return actorService.searchActorByName(name);
+    public Response search(@QueryParam("ActorName") String name, @Context UriInfo uriInfo) {
+        List<ActorDto> actorDtoList = actorService.searchActorByName(name);
+        List<Link> links = new ArrayList<>();
+
+        Link link = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("actors").path("1"))
+                .rel("actor").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("actors"))
+                .rel("actors").build();
+        links.add(link);
+
+        return Response.ok(actorDtoList).links(links.toArray(new Link[0])).build();
     }
 
     @Path("{id: [0-9]+}")

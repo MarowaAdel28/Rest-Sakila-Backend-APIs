@@ -235,4 +235,10 @@ public class StoreResource {
     public boolean editStore(@PathParam("id") Short id, StoreFormDto storeFormDto) {
         return storeService.editStore(id,storeFormDto);
     }
+
+    @DELETE
+    @Path("{id:[0-9]+}")
+    public boolean deleteStore(@PathParam("id") Short id) {
+        return storeService.deleteStore(id);
+    }
 }

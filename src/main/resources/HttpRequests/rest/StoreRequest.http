@@ -46,4 +46,8 @@ GET http://localhost:8070/apis/rest/stores/1/inventories HTTP/1.1
 ###
 GET http://localhost:8070/apis/rest/stores/1/films HTTP/1.1
 
+###
+
+DELETE http://localhost:8070/apis/rest/stores/6 HTTP/1.1
+
 

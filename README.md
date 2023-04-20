@@ -64,6 +64,7 @@ The following endpoints are available in this project and the base url:
 - `GET /actors/search?name={name}` - search actors by its name.
 - `POST /actors` - Add a new actor.
 - `PUT /actors/{id}` - Edit existing actor by its ID.
+- `DELETE /actore/{id}` - delete actor by its ID
 
 ### ActorFilm Resource
 - `GET /actor_films/{id}` - Get all films for specific actor by ActorID.
@@ -80,6 +81,7 @@ The following endpoints are available in this project and the base url:
 - `GET /customers/search?name={name}` - Search customers by its name.
 - `POST /customers` - Add a new customer.
 - `PUT /customers/{id}` - Edit existing customer by its ID.
+- `DELETE //customers/{id}` - Delete customer by its ID. 
 
 ### Category Resource
 - `GET /categories` - List all categories.
@@ -87,6 +89,7 @@ The following endpoints are available in this project and the base url:
 - `GET /categories/search?name={name}` - search category by its name.
 - `POST /categories` - Add a new category.
 - `PUT /categories/{id}` - Edit existing category by its ID.
+- `DELETE /categories/{id}` - Delete category by its ID. 
 
 ### CategoryFilm Resource
 - `GET /category_films/{id}` - Get list of films by category.
@@ -102,7 +105,7 @@ The following endpoints are available in this project and the base url:
 
 ### Film Resource
 - `POST /films` - Add a new film.
-- `PUT /films/{id}` - Edit an existing film by its ID.
+- `DELETE /films/{id}` - Delete film by its ID.
 - `GET /films` - Retrieve a list of films.
 - `GET /films/{id}` - Retrieve a film by its ID.
 
@@ -115,16 +118,19 @@ The following endpoints are available in this project and the base url:
 - `GET /inventories/{id}` - Get inventory item by ID
 - `GET /inventories/filter?filmId={id}` - Get all inventory items for a specific film
 - `GET /inventories/filter?store={id}` - Get all inventory items for a specific store
+- `DELETE /inventories/{id}` - Delete inventory by ID
 
 ### Language Resource
 - `GET /languages` - Get all languages
 - `GET /languages/{id}` - Get language by ID
 - `POST /languages` - Add a new language
 - `PUT /languages/{id}` - Update language by its ID
+- `DELETE /languages/{id}` - Delete language by its ID
 
 ### Payment Resource
 - `GET /payments` - Get all payments
 - `GET /payments/{id}` - Get payment by ID
+- `DELETE /payments/{id}` - Delete payment by ID
 
 ### Rental Resource
 - `GET /rentals` - Get all rentals
@@ -132,12 +138,14 @@ The following endpoints are available in this project and the base url:
 - `POST /rentals` - Add new rental
 - `PUT /rentals/id` - Update rental by ID
 - `GET /rentals/{id}/payment` - Get list of payment for rental by rentalID
+- `DELETE /rentals/{id}` - Delete rental by ID
 
 ### Staff Resource
 - `GET /staffs` - Get all staff members
 - `GET /staffs/{id}` - Get staff member by ID
 - `POST /staffs` - Add new staff member
 - `PUT /staffs/{id}` - Update staff member by ID
+- `DELETE /staffs/{id}` - Delete staff member by ID
 
 ### Store Resource
 - `GET /stores` - Get all stores
@@ -146,4 +154,4 @@ The following endpoints are available in this project and the base url:
 - `GET /stores/{id}/inventory` - Get inventory list for a specific store
 - `GET /stores/{id}/customers` - Get customer list for a specific store
 - `POST /stores` - Add new store
-- `PUT /stores/{id}`: Update store by ID
+- `DELETE /stores/{id}`: Delete store by ID

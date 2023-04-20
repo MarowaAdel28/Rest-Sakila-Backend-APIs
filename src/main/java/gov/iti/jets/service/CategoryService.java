@@ -156,7 +156,14 @@ public class CategoryService {
 
         Category category = categoryDAO.get(id);
 
-        boolean result = categoryDAO.delete(category);
+        boolean result = true;
+        if (category.getFilmCategoryList().size() != 0) {
+            result = false;
+        }
+
+        if(result) {
+            result = categoryDAO.delete(category);
+        }
 
         dbFactory.commitTransaction(entityManager,result);
         dbFactory.closeEntityManager(entityManager);

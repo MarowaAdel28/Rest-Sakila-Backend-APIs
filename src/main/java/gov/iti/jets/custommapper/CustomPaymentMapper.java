@@ -3,6 +3,8 @@ package gov.iti.jets.custommapper;
 import gov.iti.jets.dto.PaymentDto;
 import gov.iti.jets.entity.Customer;
 import gov.iti.jets.entity.Payment;
+import gov.iti.jets.entity.Rental;
+import gov.iti.jets.entity.Staff;
 import gov.iti.jets.mapper.PaymentMapper;
 import org.mapstruct.factory.Mappers;
 
@@ -28,14 +30,23 @@ public class CustomPaymentMapper {
 
     public PaymentDto toPaymentDto(Payment payment) {
         PaymentDto paymentDto = paymentMapper.toDto(payment);
+
         Customer customer = payment.getCustomerId();
+        Rental rental = payment.getRentalId();
+        Staff staff = payment.getStaffId();
 
-        paymentDto.setCustomerID(customer.getCustomerId());
-        paymentDto.setCustomerName(customer.getFirstName() +" " + customer.getLastName() );
-        paymentDto.setRental(payment.getRentalId().getRentalId());
-        paymentDto.setStaffName(payment.getStaffId().getFirstName() + " " +payment.getStaffId().getFirstName());
-        paymentDto.setStaff(payment.getStaffId().getStaffId());
+        if(customer!=null) {
+            paymentDto.setCustomerID(customer.getCustomerId());
+            paymentDto.setCustomerName(customer.getFirstName() + " " + customer.getLastName());
+        }
+        if(rental!=null) {
+            paymentDto.setRental(rental.getRentalId());
+        }
 
+        if (staff!=null) {
+            paymentDto.setStaffName(staff.getFirstName() + " " + staff.getFirstName());
+            paymentDto.setStaff(staff.getStaffId());
+        }
         return paymentDto;
     }
 }

@@ -7,7 +7,7 @@ This project provides REST APIs for accessing data in the Sakila Database. The S
 ****
 
 ## Documentation
-[Postman RESTful API] (https://documenter.getpostman.com/view/26734931/2s93Y3uLe4)
+[Postman RESTful API](https://documenter.getpostman.com/view/26734931/2s93Y3uLe4)
 
 ## Technology Used
 - JAX-RS (Jersey)

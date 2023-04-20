@@ -26,10 +26,13 @@ GET http://localhost:8070/apis/rest/actors HTTP/1.1
 
 ###
 
-http://localhost:8070/apis/rest/actors/1 HTTP/1.1
+GET http://localhost:8070/apis/rest/actors/1 HTTP/1.1
 
 ###
 
-http://localhost:8070/apis/rest/actors/search?ActorName=Ahmed HTTP/1.1
+GET http://localhost:8070/apis/rest/actors/search?ActorName=Ahmed HTTP/1.1
+
+###
+DELETE http://localhost:8070/apis/rest/actors/1 HTTP/1.1
 
 

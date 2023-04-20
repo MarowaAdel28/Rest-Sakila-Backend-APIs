@@ -226,4 +226,22 @@ public class StoreService {
         }
         return null;
     }
+
+    public boolean deleteStore(Short id) {
+
+        DBFactory dbFactory = DBFactory.getDbFactoryInstance();
+        EntityManager entityManager = dbFactory.createEntityManager();
+
+        StoreDAO storeDAO = new StoreDAO(entityManager);
+
+        entityManager.getTransaction().begin();
+
+        Store store = storeDAO.get(id);
+
+        boolean result = storeDAO.delete(store);
+
+        dbFactory.commitTransaction(entityManager,result);
+        dbFactory.closeEntityManager(entityManager);
+        return result;
+    }
 }

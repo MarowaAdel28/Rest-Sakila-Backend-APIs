@@ -6,8 +6,9 @@ import gov.iti.jets.dto.PaymentDto;
 import gov.iti.jets.dto.RentalDto;
 import gov.iti.jets.service.CustomerService;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("customers")
@@ -21,29 +22,112 @@ public class CustomerResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CustomerInfoDto> getAll() {
-        return customerService.getAllCustomers();
+    public Response getAll(@Context UriInfo uriInfo) {
+        List<CustomerInfoDto> customerInfoDtoList = customerService.getAllCustomers();
+
+        List<Link> links = new ArrayList<>();
+
+        Link link = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("1"))
+                .rel("customer").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("filter")
+                        .queryParam("isActive",true))
+                .rel("filter by customer activation").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("1").path("payment"))
+                .rel("customer payment").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("1").path("rental"))
+                .rel("customer rental").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("search").queryParam("name","marwa"))
+                .rel("search").build();
+        links.add(link);
+
+        return Response.ok(customerInfoDtoList).links(links.toArray(new Link[0])).build();
     }
 
     @GET
     @Path("{id:[0-9]+}")
     @Produces(MediaType.APPLICATION_JSON)
-    public CustomerInfoDto getById(@PathParam("id") short id) {
-        return customerService.getCustomerById(id);
+    public Response getById(@PathParam("id") short id, @Context UriInfo uriInfo) {
+        CustomerInfoDto customerInfoDto = customerService.getCustomerById(id);
+
+        List<Link> links = new ArrayList<>();
+
+        Link link = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers"))
+                .rel("customers").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("filter")
+                        .queryParam("isActive",true))
+                .rel("filter by customer activation").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("1").path("payment"))
+                .rel("customer payment").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("1").path("rental"))
+                .rel("customer rental").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("search").queryParam("name","marwa"))
+                .rel("search").build();
+        links.add(link);
+
+        return Response.ok(customerInfoDto).links(links.toArray(new Link[0])).build();
     }
 
     @GET
     @Path("filter")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CustomerInfoDto> filterCustomer(@QueryParam("isActive") boolean isActive) {
+    public Response filterCustomer(@QueryParam("isActive") boolean isActive,@Context UriInfo uriInfo) {
+
+        List<CustomerInfoDto> customerInfoDtoList = null;
 
         if(isActive) {
-            return customerService.getAllActiveCustomers();
+            customerInfoDtoList = customerService.getAllActiveCustomers();
         }
         if(!isActive) {
-            return customerService.getAllInactiveCustomers();
+            customerInfoDtoList = customerService.getAllInactiveCustomers();
         }
-        return null;
+        List<Link> links = new ArrayList<>();
+
+        Link link = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("1"))
+                .rel("customer").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers"))
+                .rel("customers").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("1").path("payment"))
+                .rel("customer payment").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("1").path("rental"))
+                .rel("customer rental").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("search").queryParam("name","marwa"))
+                .rel("search").build();
+        links.add(link);
+
+        return Response.ok(customerInfoDtoList).links(links.toArray(new Link[0])).build();
     }
 
     // count
@@ -51,15 +135,71 @@ public class CustomerResource {
     @GET
     @Path("{id:[0-9]+}/payment")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<PaymentDto> getCustomerPayment(@PathParam("id") short customerId) {
-        return customerService.getCustomerPayment(customerId);
+    public Response getCustomerPayment(@PathParam("id") short customerId, @Context UriInfo uriInfo) {
+        List<PaymentDto> paymentDtoList = customerService.getCustomerPayment(customerId);
+
+        List<Link> links = new ArrayList<>();
+
+        Link link = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers"))
+                .rel("customers").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("filter")
+                        .queryParam("isActive",true))
+                .rel("filter by customer activation").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("1"))
+                .rel("customer").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("1").path("rental"))
+                .rel("customer rental").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("search").queryParam("name","marwa"))
+                .rel("search").build();
+        links.add(link);
+
+        return Response.ok(paymentDtoList).links(links.toArray(new Link[0])).build();
     }
 
     @GET
     @Path("{id:[0-9]+}/rental")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<RentalDto> getCustomerRental(@PathParam("id") short customerId) {
-        return customerService.getCustomerRental(customerId);
+    public Response getCustomerRental(@PathParam("id") short customerId, @Context UriInfo uriInfo) {
+        List<RentalDto> rentalDtoList = customerService.getCustomerRental(customerId);
+
+        List<Link> links = new ArrayList<>();
+
+        Link link = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers"))
+                .rel("customers").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("filter")
+                        .queryParam("isActive",true))
+                .rel("filter by customer activation").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("1").path("payment"))
+                .rel("customer payment").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("1"))
+                .rel("customer").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("search").queryParam("name","marwa"))
+                .rel("search").build();
+        links.add(link);
+
+        return Response.ok(rentalDtoList).links(links.toArray(new Link[0])).build();
     }
 
     // count
@@ -67,8 +207,36 @@ public class CustomerResource {
     @GET
     @Path("search")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CustomerInfoDto> searchByName(@QueryParam("name") String name) {
-        return customerService.searchByName(name);
+    public Response searchByName(@QueryParam("name") String name, @Context UriInfo uriInfo) {
+        List<CustomerInfoDto> customerInfoDtoList = customerService.searchByName(name);
+
+        List<Link> links = new ArrayList<>();
+
+        Link link = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers"))
+                .rel("customers").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("filter")
+                        .queryParam("isActive",true))
+                .rel("filter by customer activation").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("1").path("payment"))
+                .rel("customer payment").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("1").path("rental"))
+                .rel("customer rental").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("customers").path("1"))
+                .rel("customer").build();
+        links.add(link);
+
+        return Response.ok(customerInfoDtoList).links(links.toArray(new Link[0])).build();
     }
 
     @POST
@@ -82,5 +250,11 @@ public class CustomerResource {
     @Path("{id:[0-9]+}")
     public boolean editCustomer(@PathParam("id") short id, CustomerFormDto customerFormDto) {
         return customerService.editCustomer(id,customerFormDto);
+    }
+
+    @DELETE
+    @Path("{id:[0-9]+}")
+    public boolean deleteCustomer(@PathParam("id") Short id) {
+        return customerService.deleteCustomer(id);
     }
 }

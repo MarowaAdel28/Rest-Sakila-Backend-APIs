@@ -3,3 +3,7 @@ GET http://localhost:8070/apis/rest/payments HTTP/1.1
 ###
 
 GET http://localhost:8070/apis/rest/payments/1 HTTP/1.1
+
+###
+
+DELETE http://localhost:8070/apis/rest/payments/1001 HTTP/1.1

@@ -5,8 +5,9 @@ import gov.iti.jets.dto.RentalDto;
 import gov.iti.jets.dto.RentalFormDto;
 import gov.iti.jets.service.RentalService;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("rentals")
@@ -20,22 +21,67 @@ public class RentalResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<RentalDto> getAll() {
-        return rentalService.getAll();
+    public Response getAll(@Context UriInfo uriInfo) {
+        List<RentalDto> rentalDtoList = rentalService.getAll();
+
+        List<Link> links = new ArrayList<>();
+
+        Link link = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("rentals").path("1"))
+                .rel("rental").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("rentals").path("1").path("payment"))
+                .rel("payment list of rental").build();
+        links.add(link);
+
+        return Response.ok(rentalDtoList).links(links.toArray(new Link[0])).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id:[0-9]+}")
-    public RentalDto getById(@PathParam("id") Short id) {
-        return rentalService.getById(id);
+    public Response getById(@PathParam("id") Short id, @Context UriInfo uriInfo) {
+        RentalDto rentalDto = rentalService.getById(id);
+
+        List<Link> links = new ArrayList<>();
+
+        Link link = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("rentals"))
+                .rel("rentals").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("rentals").path("1").path("payment"))
+                .rel("payment list of rental").build();
+        links.add(link);
+
+        return Response.ok(rentalDto).links(links.toArray(new Link[0])).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id:[0-9]+}/payment")
-    public List<PaymentDto> getPaymentList(@PathParam("id") Short id) {
-        return rentalService.getPaymentList(id);
+    public Response getPaymentList(@PathParam("id") Short id, @Context UriInfo uriInfo) {
+        List<PaymentDto> paymentDtoList = rentalService.getPaymentList(id);
+
+        List<Link> links = new ArrayList<>();
+
+        Link link = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("rentals").path("1"))
+                .rel("rental").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("rentals"))
+                .rel("rentals").build();
+        links.add(link);
+
+        return Response.ok(paymentDtoList).links(links.toArray(new Link[0])).build();
     }
 
     @POST
@@ -49,5 +95,11 @@ public class RentalResource {
     @Path("{id:[0-9]+}")
     public boolean editRental(@PathParam("id") Integer id, RentalFormDto rentalFormDto) {
         return rentalService.editRental(id,rentalFormDto);
+    }
+
+    @DELETE
+    @Path("{id:[0-9]+}")
+    public boolean deleteRental(@PathParam("id") Integer id) {
+        return rentalService.deleteRental(id);
     }
 }

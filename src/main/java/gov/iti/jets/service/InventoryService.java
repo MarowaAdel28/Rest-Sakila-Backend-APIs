@@ -1,14 +1,12 @@
 package gov.iti.jets.service;
 
-import gov.iti.jets.dao.DBFactory;
-import gov.iti.jets.dao.FilmDAO;
-import gov.iti.jets.dao.InventoryDAO;
-import gov.iti.jets.dao.StoreDAO;
+import gov.iti.jets.dao.*;
 import gov.iti.jets.dto.FilmDto;
 import gov.iti.jets.dto.InventoryDto;
 import gov.iti.jets.entity.Film;
 import gov.iti.jets.entity.Inventory;
 import gov.iti.jets.custommapper.CustomInventoryMapper;
+import gov.iti.jets.entity.Rental;
 import gov.iti.jets.entity.Store;
 import gov.iti.jets.mapper.FilmMapper;
 import gov.iti.jets.mapper.InventoryMapper;
@@ -145,5 +143,35 @@ public class InventoryService {
         return filmList;
     }
 
+    public boolean deleteInventory(Short id) {
+        DBFactory dbFactory = DBFactory.getDbFactoryInstance();
+        EntityManager entityManager = dbFactory.createEntityManager();
+        InventoryDAO inventoryDAO = new InventoryDAO(entityManager);
 
+        entityManager.getTransaction().begin();
+
+        boolean result;
+
+        Inventory inventory = inventoryDAO.get(id);
+
+        List<Rental> rentalList = inventory.getRentalList();
+
+        result = deleteRental(entityManager,rentalList);
+
+        if (result) {
+            result = inventoryDAO.delete(inventory);
+        }
+        dbFactory.commitTransaction(entityManager,result);
+        dbFactory.closeEntityManager(entityManager);
+        return result;
+    }
+    private boolean deleteRental(EntityManager entityManager, List<Rental> rentalList) {
+        RentalDAO rentalDAO = new RentalDAO(entityManager);
+        for (Rental rental : rentalList) {
+            if(!rentalDAO.delete(rental)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

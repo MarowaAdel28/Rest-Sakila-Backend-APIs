@@ -4,8 +4,9 @@ import gov.iti.jets.dto.LanguageDto;
 import gov.iti.jets.dto.LanguageFormDto;
 import gov.iti.jets.service.LanguageService;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("languages")
@@ -19,15 +20,37 @@ public class LanguageResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<LanguageDto> getAll() {
-        return languageService.getAll();
+    public Response getAll(@Context UriInfo uriInfo) {
+        List<LanguageDto> languageDtoList = languageService.getAll();
+
+        List<Link> links = new ArrayList<>();
+
+        Link link = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("languages").path("1"))
+                .rel("language").build();
+        links.add(link);
+
+        return Response.ok(languageDtoList).links(links.toArray(new Link[0])).build();
     }
 
     @GET
     @Path("{id:[0-9]+}")
     @Produces(MediaType.APPLICATION_JSON)
-    public LanguageDto getById(@PathParam("id") Short id) {
-        return languageService.getById(id);
+    public Response getById(@PathParam("id") Short id, @Context UriInfo uriInfo) {
+        LanguageDto languageDto = languageService.getById(id);
+
+        List<Link> links = new ArrayList<>();
+
+        Link link = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("inventories"))
+                .rel("inventories").build();
+        links.add(link);
+
+        return Response.ok(languageDto).links(links.toArray(new Link[0])).build();
     }
 
     @POST
@@ -41,5 +64,15 @@ public class LanguageResource {
     @Consumes({"application/xml", "application/json"})
     public boolean editLanguage(@PathParam("id") Short id, LanguageFormDto languageFormDto) {
         return languageService.editLanguage(id,languageFormDto.getName());
+    }
+
+    @DELETE
+    @Path("{id:[0-9]+}")
+    public Response delete(@PathParam("id") Short id) {
+        boolean result =  languageService.deleteLanguage(id);
+        if(result) {
+            return Response.ok("deleted successfully").build();
+        }
+        return Response.ok("failed to delete it").build();
     }
 }

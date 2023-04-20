@@ -95,4 +95,28 @@ public class LanguageService {
         dbFactory.closeEntityManager(entityManager);
         return result;
     }
+
+    public boolean deleteLanguage(Short id) {
+        DBFactory dbFactory = DBFactory.getDbFactoryInstance();
+        EntityManager entityManager = dbFactory.createEntityManager();
+
+        LanguageDAO languageDAO = new LanguageDAO(entityManager);
+
+        entityManager.getTransaction().begin();
+
+        Language language = languageDAO.get(id);
+
+        boolean result = true;
+
+        if(language.getFilmList().size() !=0) {
+            result = false;
+        }
+
+        if (result) {
+            result = languageDAO.delete(language);
+        }
+        dbFactory.commitTransaction(entityManager,result);
+        dbFactory.closeEntityManager(entityManager);
+        return result;
+    }
 }

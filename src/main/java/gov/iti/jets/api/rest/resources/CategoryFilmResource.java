@@ -6,7 +6,7 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.*;
 
 import java.util.List;
 
@@ -22,8 +22,11 @@ public class CategoryFilmResource {
     @GET
     @Path("{id:[0-9]+}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<FilmDto> getCategoryFilms(@PathParam("id") short id) {
-        return categoryService.getCategoryFilms(id);
+    public Response getCategoryFilms(@PathParam("id") short id, @Context UriInfo uriInfo) {
+
+        List<FilmDto> filmDtoList = categoryService.getCategoryFilms(id);
+        Link self = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        return Response.ok(filmDtoList).links(self).build();
     }
 
     // count

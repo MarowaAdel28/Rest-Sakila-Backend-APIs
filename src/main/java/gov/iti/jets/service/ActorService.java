@@ -2,6 +2,7 @@ package gov.iti.jets.service;
 
 import gov.iti.jets.dao.ActorDAO;
 import gov.iti.jets.dao.DBFactory;
+import gov.iti.jets.dao.FilmActorDAO;
 import gov.iti.jets.dto.ActorDto;
 import gov.iti.jets.dto.ActorFormDto;
 import gov.iti.jets.dto.FilmDto;
@@ -200,4 +201,33 @@ public class ActorService {
         return isUpdated;
     }
 
+    public boolean deleteActor(Short id) {
+        DBFactory dbFactory = DBFactory.getDbFactoryInstance();
+        EntityManager entityManager = dbFactory.createEntityManager();
+        ActorDAO actorDAO = new ActorDAO(entityManager);
+
+        entityManager.getTransaction().begin();
+
+        Actor actor = actorDAO.get(id);
+        List<FilmActor> filmActorList = actor.getFilmActorList();
+
+        boolean result;
+        result = deleteFilmActor(entityManager,filmActorList);
+        if(result) {
+            actorDAO.delete(actor);
+        }
+        dbFactory.commitTransaction(entityManager,result);
+        dbFactory.closeEntityManager(entityManager);
+        return result;
+    }
+
+    private boolean deleteFilmActor(EntityManager entityManager,List<FilmActor> filmActorList) {
+        FilmActorDAO filmActorDAO = new FilmActorDAO(entityManager);
+        for (FilmActor filmActor : filmActorList) {
+            if(!filmActorDAO.delete(filmActor)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

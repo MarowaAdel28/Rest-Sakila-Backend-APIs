@@ -4,8 +4,9 @@ import gov.iti.jets.dto.CategoryDto;
 import gov.iti.jets.dto.CategoryFormDto;
 import gov.iti.jets.service.CategoryService;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("categories")
@@ -19,22 +20,69 @@ public class CategoryResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CategoryDto> getAll() {
-        return categoryService.getAllCategories();
+    public Response getAll(@Context UriInfo uriInfo) {
+
+        List<CategoryDto> categoryDtoList = categoryService.getAllCategories();
+        List<Link> links = new ArrayList<>();
+
+        Link link = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("categories").path("1"))
+                .rel("category").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("categories").path("search")
+                        .queryParam("name","Classic"))
+                .rel("search").build();
+        links.add(link);
+
+        return Response.ok(categoryDtoList).links(links.toArray(new Link[0])).build();
     }
 
     @GET
     @Path("{id:[0-9]+}")
     @Produces(MediaType.APPLICATION_JSON)
-    public CategoryDto getById(@PathParam("id") short id) {
-        return categoryService.getCategoryById(id);
+    public Response getById(@PathParam("id") short id, @Context UriInfo uriInfo) {
+        CategoryDto categoryDto = categoryService.getCategoryById(id);
+
+        List<Link> links = new ArrayList<>();
+
+        Link link = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("categories"))
+                .rel("categories").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("categories").path("search")
+                        .queryParam("name","Classic"))
+                .rel("search").build();
+        links.add(link);
+
+        return Response.ok(categoryDto).links(links.toArray(new Link[0])).build();
     }
 
     @GET
     @Path("search")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CategoryDto> searchByName(@QueryParam("name") String name) {
-        return categoryService.searchCategoryByName(name);
+    public Response searchByName(@QueryParam("name") String name,@Context UriInfo uriInfo) {
+        List<CategoryDto> categoryDtoList = categoryService.searchCategoryByName(name);
+
+        List<Link> links = new ArrayList<>();
+
+        Link link = Link.fromUriBuilder(uriInfo.getAbsolutePathBuilder()).rel("self").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("categories").path("1"))
+                .rel("category").build();
+        links.add(link);
+
+        link = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("categories"))
+                .rel("categories").build();
+        links.add(link);
+
+        return Response.ok(categoryDtoList).links(links.toArray(new Link[0])).build();
     }
 
     @POST
@@ -52,4 +100,9 @@ public class CategoryResource {
         return categoryService.editCategory(categoryId,categoryDto.getCategoryName());
     }
 
+    @DELETE
+    @Path("{id:[0-9]+}")
+    public boolean deleteCategory(@PathParam("id") Short id) {
+        return categoryService.deleteCategory(id);
+    }
 }
